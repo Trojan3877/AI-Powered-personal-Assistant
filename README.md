@@ -1,3 +1,13 @@
+![MIT License](https://img.shields.io/badge/license-MIT-green.svg)
+![GitHub repo stars](https://img.shields.io/github/stars/Trojan3877/AI-Powered-Business-Application-Lab?style=social)
+![GitHub forks](https://img.shields.io/github/forks/Trojan3877/AI-Powered-Business-Application-Lab?style=social)
+![Build passing](https://img.shields.io/github/actions/workflow/status/Trojan3877/AI-Powered-Business-Application-Lab/ci.yml?branch=main)
+![Python version](https://img.shields.io/badge/python-3.9%2B-blue)
+
+
+
+
+
 # AI-Powered-personal-Assistant# AI-Powered Personal Task Assistant
 
 A tool that uses AI to manage tasks by parsing natural language input, prioritizing tasks, and providing user insights.
