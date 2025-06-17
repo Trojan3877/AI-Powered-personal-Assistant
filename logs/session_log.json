@@ -1,0 +1,41 @@
+import json
+import time
+from datetime import datetime
+from assistant.main import process_user_input
+
+def log_to_json(user_input, response, latency):
+    timestamp = datetime.utcnow().isoformat()
+    log_entry = {
+        "timestamp": timestamp,
+        "input": user_input,
+        "output": response,
+        "latency": f"{latency:.2f}s"
+    }
+
+    try:
+        with open("logs/session_log.json", "r+") as file:
+            try:
+                data = json.load(file)
+            except json.decoder.JSONDecodeError:
+                data = []
+            data.append(log_entry)
+            file.seek(0)
+            json.dump(data, file, indent=2)
+    except FileNotFoundError:
+        with open("logs/session_log.json", "w") as file:
+            json.dump([log_entry], file, indent=2)
+
+def main():
+    print("Welcome to the AI Assistant!")
+    while True:
+        user_input = input("You: ")
+        if user_input.lower() == "exit":
+            break
+        start = time.time()
+        response = process_user_input(user_input)
+        latency = time.time() - start
+        print(f"Assistant: {response}")
+        log_to_json(user_input, response, latency)
+
+if __name__ == "__main__":
+    main()
