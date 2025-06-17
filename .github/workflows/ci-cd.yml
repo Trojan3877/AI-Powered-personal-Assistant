@@ -1,0 +1,38 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.11"
+
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Run Lint and Tests
+      run: |
+        echo "🔍 Running tests (placeholder)"
+        # pytest tests/ --maxfail=1 --disable-warnings
+
+    - name: Build Docker Image
+      run: |
+        docker build -t ai_personal_assistant:latest .
+
+    - name: Deploy to DockerHub (optional)
+      if: github.ref == 'refs/heads/main'
+      run: echo "📦 Push to registry (configure credentials)"
