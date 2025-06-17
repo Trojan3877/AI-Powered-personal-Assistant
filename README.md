@@ -13,6 +13,7 @@ A modular, cloud-native AI Assistant powered by OpenAI, Snowflake, and a DevOps-
 ![OpenAI](https://img.shields.io/badge/ML%20Algo-GPT--3.5%20Turbo-blue)
 ![Kubernetes](https://img.shields.io/badge/Kubernetes-ready-blue)
 ![Snowflake](https://img.shields.io/badge/Snowflake-supported-lightblue)
+🔄 [Download Superset Dashboard Config](dashboards/superset_ai_performance.json)
 
 ---
 
