@@ -1,0 +1,21 @@
+replicaCount: 1
+
+image:
+  repository: your-dockerhub-username/ai_personal_assistant
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+service:
+  type: ClusterIP
+  port: 8080
+
+env:
+  OPENAI_API_KEY: "<your_openai_key_here>"
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 250m
+    memory: 256Mi
