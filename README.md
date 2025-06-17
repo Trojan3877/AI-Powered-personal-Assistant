@@ -1,42 +1,56 @@
 # 🤖 AI-Powered Personal Assistant
 
-A modular, containerized AI Assistant built with OpenAI, Kubernetes, Terraform, Ansible, Helm, and CI/CD.  
-Designed for intelligent scheduling, semantic Q&A, Snowflake queries, and scalable cloud-native deployment.
+A modular, cloud-native AI Assistant powered by OpenAI, Snowflake, and a DevOps-first architecture. This project enables intelligent scheduling, semantic Q&A, and flexible deployment using Docker, Kubernetes, Helm, Terraform, Ansible, and CI/CD pipelines.
 
 ---
 
-## 🧠 Core Features
+## 📌 Badges
 
-- ✨ GPT-3.5 Turbo via OpenAI API
-- 📅 Scheduling & intelligent reminders
-- ❓ Snowflake-powered Q&A fallback to OpenAI
-- 🐳 Dockerized for reproducible environments
-- ☸️ K8s + Helm for modern orchestration
-- ☁️ Terraform + Ansible for infrastructure setup
-- 🔁 GitHub Actions for continuous delivery
-- 🔐 .env secrets with Helm values support
-- 📊 Visual flowchart of system design
+![Status](https://img.shields.io/badge/status-active-brightgreen)
+![License](https://img.shields.io/github/license/Trojan3877/AI-Powered-personal-Assistant)
+![Build](https://img.shields.io/badge/build-passing-success)
+![CI/CD](https://img.shields.io/badge/CI--CD-GitHub%20Actions-blue)
+![OpenAI](https://img.shields.io/badge/ML%20Algo-GPT--3.5%20Turbo-blue)
+![Kubernetes](https://img.shields.io/badge/Kubernetes-ready-blue)
+![Snowflake](https://img.shields.io/badge/Snowflake-supported-lightblue)
 
 ---
 
-## 📂 Repository Structure
+## 📘 Extended Description
 
+The AI-Powered Personal Assistant is a full-stack, production-grade LLM application designed for real-world ML use cases and scalable infrastructure. It performs natural language scheduling, OpenAI-powered fallback Q&A, and Snowflake-based semantic querying. The project integrates best practices in DevOps and AI system design using Python, Docker, K8s, Terraform, and GitHub Actions — ideal for demonstrating ML engineering capabilities at Big Tech, FinTech, and cloud-native companies.
 
+---
+
+## 📂 Project Structure
+
+├── assistant/ # Main assistant logic
+├── modules/ # Scheduling and Q&A engines
+├── terraform/ # Infra-as-code setup
+├── ansible/ # Server automation
+├── helm/ # Helm chart for K8s deployment
+├── k8s/ # K8s deployment YAMLs
+├── tests/ # Unit tests
+├── demo.py # CLI E2E assistant interaction
+├── Dockerfile
+├── docker-compose.yaml
+├── Makefile
+├── .env.example
 ---
 
 ## 🛠️ Technologies Used
 
 | Tool           | Purpose                                   |
 |----------------|-------------------------------------------|
-| `Python`       | Backend ML/logic                          |
-| `OpenAI API`   | Language reasoning / fallback NLP         |
-| `Snowflake`    | Structured semantic memory layer          |
-| `Docker`       | Local + production containerization       |
-| `Kubernetes`   | Cluster orchestration                     |
-| `Helm`         | Declarative deployment packaging          |
-| `Terraform`    | Cloud infrastructure as code              |
-| `Ansible`      | VM/server automation                      |
-| `CI/CD`        | GitHub Actions for test + deploy          |
+| Python         | Backend logic & NLP processing            |
+| OpenAI         | GPT-3.5 API for fallback reasoning        |
+| Snowflake      | Structured semantic Q&A                   |
+| Docker         | Containerization                          |
+| Kubernetes     | Orchestration                             |
+| Helm           | Deployment templating                     |
+| Terraform      | Infra provisioning (AWS/GCP-ready)        |
+| Ansible        | Server configuration                      |
+| GitHub Actions | CI/CD automation                          |
 
 ---
 
@@ -47,27 +61,12 @@ Designed for intelligent scheduling, semantic Q&A, Snowflake queries, and scalab
 make install
 make run
 
-# Dockerized
+# Docker
 make docker-build
 make docker-run
 
-# Kubernetes (manual)
+# Kubernetes
 kubectl apply -f k8s/deployment.yaml
 
-# Terraform (infrastructure provisioning)
-terraform init
-terraform apply
-
-AI Assistant · Python · OpenAI · Snowflake · DevOps · Kubernetes · Helm · Terraform · Ansible · CI/CD · LLM · GitHub Actions · Docker · Cloud Deployment
-
-
-![Build](https://github.com/Trojan3877/AI-Powered-personal-Assistant/actions/workflows/ci-cd.yml/badge.svg)
-
-
-![Status](https://img.shields.io/badge/status-active-brightgreen)
-![License](https://img.shields.io/github/license/Trojan3877/AI-Powered-personal-Assistant)
-![Build](https://img.shields.io/badge/build-passing-success)
-![CI/CD](https://img.shields.io/badge/CI--CD-GitHub%20Actions-blue)
-![OpenAI](https://img.shields.io/badge/ML%20Algo-GPT--3.5%20Turbo-blue)
-![Kubernetes](https://img.shields.io/badge/Kubernetes-ready-blue)
-![Snowflake](https://img.shields.io/badge/Snowflake-supported-lightblue)
+# Terraform
+cd terraform && terraform init && terraform apply
