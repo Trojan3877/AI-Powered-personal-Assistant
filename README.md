@@ -5,6 +5,7 @@ A modular, cloud-native AI Assistant powered by OpenAI, Snowflake, and a DevOps-
 ---
 
 ## 📌 Badges
+![Capstone Project](https://img.shields.io/badge/Capstone-Project-blueviolet?style=for-the-badge&logo=github)
 
 ![Status](https://img.shields.io/badge/status-active-brightgreen)
 ![License](https://img.shields.io/github/license/Trojan3877/AI-Powered-personal-Assistant)
