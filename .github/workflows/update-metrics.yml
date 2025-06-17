@@ -1,0 +1,42 @@
+name: Auto Generate Metrics Table
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  generate-metrics:
+    runs-on: ubuntu-latest
+    name: Generate README Metrics Table
+
+    steps:
+    - name: ⬇️ Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: 🐍 Set Up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: 📦 Install Dependencies
+      run: pip install -r requirements.txt || true
+
+    - name: 🧠 Run Metrics Script
+      run: |
+        python scripts/generate_metrics_table.py > TEMP_METRICS.md
+        echo "Replacing metrics block..."
+        awk '/## 📊 Performance Metrics/{flag=1; print; next} /### 📈 Summary Stats/{flag=0} !flag' README.md > TEMP_README.md
+        cat TEMP_METRICS.md >> TEMP_README.md
+        mv TEMP_README.md README.md
+
+    - name: ✅ Commit & Push Updated README
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git add README.md
+        git commit -m "🤖 Auto-update README performance metrics"
+        git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
