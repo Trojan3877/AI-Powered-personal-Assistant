@@ -1,56 +1,73 @@
-# AI-Powered Business Application Lab
+# 🤖 AI-Powered Personal Assistant
 
-![MIT License](https://img.shields.io/badge/license-MIT-green.svg)
-![GitHub repo stars](https://img.shields.io/github/stars/Trojan3877/AI-Powered-Business-Application-Lab?style=social)
-![GitHub forks](https://img.shields.io/github/forks/Trojan3877/AI-Powered-Business-Application-Lab?style=social)
-![Build passing](https://img.shields.io/github/actions/workflow/status/Trojan3877/AI-Powered-Business-Application-Lab/ci.yml?branch=main)
-![Python version](https://img.shields.io/badge/python-3.9%2B-blue)
+A modular, containerized AI Assistant built with OpenAI, Kubernetes, Terraform, Ansible, Helm, and CI/CD.  
+Designed for intelligent scheduling, semantic Q&A, Snowflake queries, and scalable cloud-native deployment.
 
 ---
 
-## Overview
+## 🧠 Core Features
 
-A **lab of prototype AI-powered business applications**, demonstrating diverse use cases of AI/ML in enterprise environments.
-
-Included demos:
-✅ AI-based customer churn prediction  
-✅ NLP-driven document summarization  
-✅ Demand forecasting pipeline  
-
----
-
-## Business Impact
-
-This lab demonstrates AI-driven solutions for:
-- CRM optimization  
-- Document-heavy industries (legal, finance, healthcare)  
-- Retail demand planning  
+- ✨ GPT-3.5 Turbo via OpenAI API
+- 📅 Scheduling & intelligent reminders
+- ❓ Snowflake-powered Q&A fallback to OpenAI
+- 🐳 Dockerized for reproducible environments
+- ☸️ K8s + Helm for modern orchestration
+- ☁️ Terraform + Ansible for infrastructure setup
+- 🔁 GitHub Actions for continuous delivery
+- 🔐 .env secrets with Helm values support
+- 📊 Visual flowchart of system design
 
 ---
 
-## Architecture
+## 📂 Repository Structure
 
-![Architecture Diagram](docs/architecture.png)
-
----
-
-## Tech Stack
-
-- Python 3.9+  
-- scikit-learn  
-- Hugging Face Transformers (NLP tasks)  
-- pandas / NumPy  
 
 ---
 
-## Future Work
+## 🛠️ Technologies Used
 
-- Deploy as API suite  
-- Add explainable AI (XAI) layer  
-- Integrate with business dashboards  
+| Tool           | Purpose                                   |
+|----------------|-------------------------------------------|
+| `Python`       | Backend ML/logic                          |
+| `OpenAI API`   | Language reasoning / fallback NLP         |
+| `Snowflake`    | Structured semantic memory layer          |
+| `Docker`       | Local + production containerization       |
+| `Kubernetes`   | Cluster orchestration                     |
+| `Helm`         | Declarative deployment packaging          |
+| `Terraform`    | Cloud infrastructure as code              |
+| `Ansible`      | VM/server automation                      |
+| `CI/CD`        | GitHub Actions for test + deploy          |
 
 ---
 
-## License
+## 🚀 Deployment
 
-MIT License
+```bash
+# Local Dev
+make install
+make run
+
+# Dockerized
+make docker-build
+make docker-run
+
+# Kubernetes (manual)
+kubectl apply -f k8s/deployment.yaml
+
+# Terraform (infrastructure provisioning)
+terraform init
+terraform apply
+
+AI Assistant · Python · OpenAI · Snowflake · DevOps · Kubernetes · Helm · Terraform · Ansible · CI/CD · LLM · GitHub Actions · Docker · Cloud Deployment
+
+
+![Build](https://github.com/Trojan3877/AI-Powered-personal-Assistant/actions/workflows/ci-cd.yml/badge.svg)
+
+
+![Status](https://img.shields.io/badge/status-active-brightgreen)
+![License](https://img.shields.io/github/license/Trojan3877/AI-Powered-personal-Assistant)
+![Build](https://img.shields.io/badge/build-passing-success)
+![CI/CD](https://img.shields.io/badge/CI--CD-GitHub%20Actions-blue)
+![OpenAI](https://img.shields.io/badge/ML%20Algo-GPT--3.5%20Turbo-blue)
+![Kubernetes](https://img.shields.io/badge/Kubernetes-ready-blue)
+![Snowflake](https://img.shields.io/badge/Snowflake-supported-lightblue)
