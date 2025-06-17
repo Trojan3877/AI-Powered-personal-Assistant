@@ -1,0 +1,7 @@
+# Python Requirements for AI-Powered Personal Assistant
+
+openai==1.14.3
+python-dotenv==1.0.1
+snowflake-connector-python==3.6.1
+requests==2.31.0
+pandas==2.2.2
