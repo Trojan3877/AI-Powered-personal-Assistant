@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ai-personal-assistant
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ai-assistant
+  template:
+    metadata:
+      labels:
+        app: ai-assistant
+    spec:
+      containers:
+        - name: ai-assistant
+          image: ai_personal_assistant:latest
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - secretRef:
+                name: openai-secrets
+          volumeMounts:
+            - name: app-data
+              mountPath: /app
+      volumes:
+        - name: app-data
+          hostPath:
+            path: /app
+            type: Directory
