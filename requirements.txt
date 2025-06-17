@@ -5,3 +5,46 @@ python-dotenv==1.0.1
 snowflake-connector-python==3.6.1
 requests==2.31.0
 pandas==2.2.2
+
+snowflake-connector-python
+pandas
+
+import pandas as pd
+import snowflake.connector
+
+# Load data
+df = pd.read_csv("logs/performance_metrics.csv")
+
+# Connect to Snowflake
+conn = snowflake.connector.connect(
+    user='YOUR_USERNAME',
+    password='YOUR_PASSWORD',
+    account='YOUR_ACCOUNT',
+    warehouse='COMPUTE_WH',
+    database='AI_ASSISTANT_DB',
+    schema='LOGS'
+)
+
+cursor = conn.cursor()
+
+# Create table if not exists
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS performance_logs (
+    timestamp STRING,
+    input STRING,
+    output STRING,
+    latency STRING
+)
+""")
+
+# Upload row by row
+for _, row in df.iterrows():
+    cursor.execute("""
+        INSERT INTO performance_logs (timestamp, input, output, latency)
+        VALUES (%s, %s, %s, %s)
+    """, (row['timestamp'], row['input'], row['output'], row['latency']))
+
+cursor.close()
+conn.close()
+
+print("✅ Metrics uploaded to Snowflake.")
