@@ -104,6 +104,36 @@ python -m json.tool benchmark-results.json
 python -m compileall -q assistant modules agents scripts src
 ```
 
+## Senior review follow-up: assistant behavior and reproducibility
+
+This section closes the documentation items tracked in [issue #7](https://github.com/CoreyLeath-code/AI-Powered-personal-Assistant/issues/7). Recorded values are local deterministic-harness evidence; production availability, provider quality, privacy, and cost are not implied.
+
+### Verification contract
+
+From a clean checkout:
+
+```bash
+python -m venv .venv
+# Linux/macOS: source .venv/bin/activate
+# Windows: .venv\Scripts\activate
+python -m pip install -r requirements.txt -r requirements-dev.txt
+pytest --cov=assistant --cov=modules --cov=agents --cov=scripts --cov-report=term-missing
+ruff check .
+python benchmarks/assistant_benchmarks.py --iterations 500 --output benchmark-results.json
+python -m json.tool benchmark-results.json
+python -m compileall -q assistant modules agents scripts src
+```
+
+The benchmark JSON and `logs/session_log.json` are the canonical evidence for latency and sample-response claims. The current README records 22 deterministic tests and 96% local coverage; these must be rechecked in the workflow run for the reviewed commit. Provider-backed evaluation, secret scanning, dependency scanning, and image-size measurements should be reported as CI artifacts, not represented by an unqualified “production” badge.
+
+### Engineering decisions and failure modes
+
+- **Deterministic routing first:** local intent routing keeps the common path fast and testable, while optional provider fallback improves breadth at the cost of network latency, quota, and failure handling.
+- **Tool execution is a trust boundary:** calendar/search/memory adapters need schema validation, timeouts, idempotency, and redacted logs before they can handle user data.
+- **Quality is more than route latency:** the next evaluation set should include ambiguous intents, prompt injection attempts, unavailable tools, provider timeouts, and hallucination-sensitive answers with expected-safe behavior.
+- **Next production step:** publish a versioned evaluation fixture with pass/fail criteria for helpfulness, refusal behavior, tool correctness, p95 latency, and cost per request; keep the current microbenchmarks labeled as component measurements.
+
+
 ## Known Gaps
 
 - The OpenAI and Snowflake integrations are adapter stubs, not production credential
