@@ -19,3 +19,19 @@ def test_process_user_input_with_question(monkeypatch):
 def test_process_user_input_with_empty():
     result = main.process_user_input("")
     assert result == "I'm sorry, I didn't understand that."
+
+
+
+def test_prompt_history_is_bounded(monkeypatch):
+    monkeypatch.setattr(main, "query_openai", lambda _: "fallback")
+
+    main.context_memory.clear()
+    try:
+        for index in range(main.CONTEXT_MEMORY_LIMIT + 1):
+            assert main.process_user_input(f"message {index}") == "fallback"
+
+        assert len(main.context_memory) == main.CONTEXT_MEMORY_LIMIT
+        assert main.context_memory[0] == "message 1"
+        assert main.context_memory[-1] == f"message {main.CONTEXT_MEMORY_LIMIT}"
+    finally:
+        main.context_memory.clear()

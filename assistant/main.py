@@ -1,11 +1,14 @@
 """Core assistant routing logic."""
 
 import os
+from collections import deque
 
 from modules.qa import answer_query
 from modules.scheduler import handle_schedule
 
-context_memory: list[str] = []
+CONTEXT_MEMORY_LIMIT = 100
+# Retain a small recent window for local routing context without unbounded prompt storage.
+context_memory: deque[str] = deque(maxlen=CONTEXT_MEMORY_LIMIT)
 
 SCHEDULE_KEYWORDS = {"schedule", "remind", "meeting", "appointment", "calendar"}
 QA_KEYWORDS = {"question", "what", "who", "when", "where", "why", "how", "explain"}

@@ -183,6 +183,10 @@ The benchmark JSON and `logs/session_log.json` are the canonical evidence for la
 - **Next production step:** publish a versioned evaluation fixture with pass/fail criteria for helpfulness, refusal behavior, tool correctness, p95 latency, and cost per request; keep the current microbenchmarks labeled as component measurements.
 
 
+## In-memory prompt retention
+
+The lightweight local runtime retains only the most recent 100 prompts in process memory for routing context. Older prompts are discarded; this buffer is not durable memory, a user-history feature, or a substitute for an approved retention policy.
+
 ## Known Gaps
 
 - The OpenAI and Snowflake integrations are adapter stubs, not production credential
