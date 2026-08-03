@@ -15,4 +15,4 @@ def test_context_memory_records_non_empty_inputs(monkeypatch):
 
     main.process_user_input("What should I do next?")
 
-    assert main.context_memory == ["What should I do next?"]
+    assert list(main.context_memory) == ["What should I do next?"]
