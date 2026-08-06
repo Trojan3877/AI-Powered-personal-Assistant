@@ -1,0 +1,153 @@
+{
+  "name": "GitHub pull-request assistant — AI-Powered-personal-Assistant",
+  "nodes": [
+    {
+      "parameters": {
+        "owner": "={{ $env.GITHUB_OWNER }}",
+        "repository": "AI-Powered-personal-Assistant",
+        "events": [
+          "pull_request"
+        ]
+      },
+      "id": "pr-trigger",
+      "name": "GitHub pull request",
+      "type": "n8n-nodes-base.githubTrigger",
+      "typeVersion": 1,
+      "position": [
+        -560,
+        0
+      ],
+      "credentials": {
+        "githubApi": {
+          "id": "REPLACE_WITH_GITHUB_OAUTH_CREDENTIAL_ID",
+          "name": "GitHub organization OAuth"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const event = $json;\nif (![\"opened\", \"reopened\", \"synchronize\"].includes(event.action) || !event.pull_request) return [];\nreturn [{ json: { number: event.pull_request.number, body: event.pull_request.body || \"\" } }];"
+      },
+      "id": "filter-pr-events",
+      "name": "Keep reviewable PR events",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -320,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "url": "=https://api.github.com/repos/{{$env.GITHUB_OWNER}}/AI-Powered-personal-Assistant/pulls/{{$json.number}}/files?per_page=100",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "githubApi",
+        "options": {}
+      },
+      "id": "get-pr-files",
+      "name": "Get changed files",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -80,
+        0
+      ],
+      "credentials": {
+        "githubApi": {
+          "id": "REPLACE_WITH_GITHUB_OAUTH_CREDENTIAL_ID",
+          "name": "GitHub organization OAuth"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const files = $input.all().map(({ json }) => json.filename).filter(Boolean);\nconst areas = [...new Set(files.map((file) => file.includes(\"/\") ? file.split(\"/\")[0] : \"(repository root)\"))].sort();\nconst pr = $(\"Keep reviewable PR events\").first().json;\nconst issueLinked = /(?:close[sd]?|fix(?:e[sd])?|resolve[sd]?)\\\\s+#\\\\d+/i.test(pr.body);\nconst checklist = [\n  \"## Automated PR context\",\n  \"\",\n  `- Changed top-level areas: ${areas.length ? areas.map((area) => \"\\\\`\" + area + \"\\\\`\").join(\", \") : \"none reported\"}`,\n  `- Files reported by GitHub: ${files.length}`,\n  `- Linked issue syntax detected: ${issueLinked ? \"yes\" : \"no\"}`,\n  \"\",\n  \"Please confirm the relevant tests, documentation, configuration, and security implications for the changed areas. This comment is contextual only; it does not approve the pull request.\"\n].join(\"\\\\n\");\nreturn [{ json: { number: pr.number, body: checklist } }];"
+      },
+      "id": "build-context",
+      "name": "Build PR context",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        160,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.github.com/repos/{{$env.GITHUB_OWNER}}/AI-Powered-personal-Assistant/issues/{{$json.number}}/comments",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "githubApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ body: $json.body }) }}",
+        "options": {}
+      },
+      "id": "comment-pr",
+      "name": "Post contextual checklist",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        400,
+        0
+      ],
+      "credentials": {
+        "githubApi": {
+          "id": "REPLACE_WITH_GITHUB_OAUTH_CREDENTIAL_ID",
+          "name": "GitHub organization OAuth"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "GitHub pull request": {
+      "main": [
+        [
+          {
+            "node": "Keep reviewable PR events",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Keep reviewable PR events": {
+      "main": [
+        [
+          {
+            "node": "Get changed files",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get changed files": {
+      "main": [
+        [
+          {
+            "node": "Build PR context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build PR context": {
+      "main": [
+        [
+          {
+            "node": "Post contextual checklist",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "1"
+}
