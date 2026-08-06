@@ -1,0 +1,96 @@
+{
+  "name": "GitHub issue triage — AI-Powered-personal-Assistant",
+  "nodes": [
+    {
+      "parameters": {
+        "owner": "={{ $env.GITHUB_OWNER }}",
+        "repository": "AI-Powered-personal-Assistant",
+        "events": [
+          "issues"
+        ]
+      },
+      "id": "issue-trigger",
+      "name": "GitHub issue opened",
+      "type": "n8n-nodes-base.githubTrigger",
+      "typeVersion": 1,
+      "position": [
+        -520,
+        0
+      ],
+      "credentials": {
+        "githubApi": {
+          "id": "REPLACE_WITH_GITHUB_OAUTH_CREDENTIAL_ID",
+          "name": "GitHub organization OAuth"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const event = $json;\nconst action = event.action;\nconst issue = event.issue;\nif (action !== \"opened\" || !issue || issue.pull_request) return [];\nconst text = `${issue.title || \"\"} ${issue.body || \"\"}`.toLowerCase();\nconst labels = [\"needs-triage\"];\nif (/\\\\b(bug|error|exception|crash|broken|fail(?:s|ed|ure)?)\\\\b/.test(text)) labels.push(\"bug\");\nelse if (/\\\\b(doc|readme|documentation|guide)\\\\b/.test(text)) labels.push(\"documentation\");\nelse if (/\\\\b(feature|request|proposal|support)\\\\b/.test(text)) labels.push(\"feature\");\nelse if (/\\\\b(question|how do|how to|help)\\\\b/.test(text)) labels.push(\"question\");\nelse labels.push(\"enhancement\");\nif (/\\\\b(security|vulnerab|data loss|outage|critical)\\\\b/.test(text)) labels.push(\"priority:high\");\nelse if (/\\\\b(regression|blocked|urgent|broken)\\\\b/.test(text)) labels.push(\"priority:medium\");\nelse labels.push(\"priority:low\");\nreturn [{ json: { issueNumber: issue.number, labels } }];"
+      },
+      "id": "classify",
+      "name": "Classify conservatively",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -260,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.github.com/repos/{{$env.GITHUB_OWNER}}/AI-Powered-personal-Assistant/issues/{{$json.issueNumber}}/labels",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "githubApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ labels: $json.labels }) }}",
+        "options": {}
+      },
+      "id": "label-issue",
+      "name": "Apply triage labels",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        0,
+        0
+      ],
+      "credentials": {
+        "githubApi": {
+          "id": "REPLACE_WITH_GITHUB_OAUTH_CREDENTIAL_ID",
+          "name": "GitHub organization OAuth"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "GitHub issue opened": {
+      "main": [
+        [
+          {
+            "node": "Classify conservatively",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Classify conservatively": {
+      "main": [
+        [
+          {
+            "node": "Apply triage labels",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "1"
+}
