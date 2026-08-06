@@ -1,0 +1,117 @@
+{
+  "name": "GitHub label bootstrap — AI-Powered-personal-Assistant",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "manual-trigger",
+      "name": "Manual trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -520,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "url": "=https://api.github.com/repos/{{$env.GITHUB_OWNER}}/AI-Powered-personal-Assistant/labels?per_page=100",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "githubApi",
+        "options": {}
+      },
+      "id": "get-labels",
+      "name": "Get existing labels",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -280,
+        0
+      ],
+      "credentials": {
+        "githubApi": {
+          "id": "REPLACE_WITH_GITHUB_OAUTH_CREDENTIAL_ID",
+          "name": "GitHub organization OAuth"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const desired = [\n  { name: \"bug\", color: \"d73a4a\" },\n  { name: \"feature\", color: \"1d76db\" },\n  { name: \"documentation\", color: \"0075ca\" },\n  { name: \"enhancement\", color: \"a2eeef\" },\n  { name: \"question\", color: \"d876e3\" },\n  { name: \"needs-triage\", color: \"fbca04\" },\n  { name: \"priority:high\", color: \"b60205\" },\n  { name: \"priority:medium\", color: \"fbca04\" },\n  { name: \"priority:low\", color: \"0e8a16\" },\n  { name: \"good first issue\", color: \"7057ff\" },\n  { name: \"help wanted\", color: \"008672\" },\n];\nconst existing = new Set($input.all().map(({ json }) => json.name));\nreturn desired.filter((label) => !existing.has(label.name)).map((json) => ({ json }));"
+      },
+      "id": "missing-labels",
+      "name": "Select missing labels only",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.github.com/repos/{{$env.GITHUB_OWNER}}/AI-Powered-personal-Assistant/labels",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "githubApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {}
+      },
+      "id": "create-label",
+      "name": "Create missing label",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        260,
+        0
+      ],
+      "credentials": {
+        "githubApi": {
+          "id": "REPLACE_WITH_GITHUB_OAUTH_CREDENTIAL_ID",
+          "name": "GitHub organization OAuth"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Manual trigger": {
+      "main": [
+        [
+          {
+            "node": "Get existing labels",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get existing labels": {
+      "main": [
+        [
+          {
+            "node": "Select missing labels only",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Select missing labels only": {
+      "main": [
+        [
+          {
+            "node": "Create missing label",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "1"
+}
