@@ -195,7 +195,7 @@ Tags matching `v*.*.*` trigger the release workflow. The workflow publishes:
 
 Before tagging a release, require green CI, quality, security, CodeQL, and benchmark workflows for the release commit.
 
-## L6 engineering assessment
+Engineering assessment
 
 Strengths already demonstrated:
 
