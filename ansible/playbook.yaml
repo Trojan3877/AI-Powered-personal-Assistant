@@ -27,7 +27,7 @@
 
     - name: Clone repository (if not already)
       git:
-        repo: 'https://github.com/Trojan3877/AI-Powered-personal-Assistant.git'
+        repo: 'https://github.com/CoreyLeath-code/AI-Powered-personal-Assistant.git'
         dest: "{{ app_directory }}"
 
     - name: Install Python requirements
